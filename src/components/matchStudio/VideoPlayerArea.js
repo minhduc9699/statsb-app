@@ -14,6 +14,7 @@ import {
   setSeekingTime,
 } from "../../store/videoSlide";
 
+import matchAPI from "../../api/matchAPI";
 import fiveBackward from "../../assets/video-player/5-seconds-backward.png";
 import tenBackward from "../../assets/video-player/10-seconds-backward.png";
 import fiveForward from "../../assets/video-player/5-seconds-forward.png";
@@ -63,13 +64,23 @@ const VideoPlayerArea = ({ matchData }) => {
     handleSeek();
   }, [seekingTime]);
 
-  const handleAfterUpload = (fileInfo) => {
+  const handleAfterUpload = async (fileInfo) => {
     console.log(fileInfo);
 
     const url = fileInfo.allEntries[0].cdnUrl;
     if (url === null) return;
     dispatch(addVideo({ src: url, name: "hiep1" }));
+    await updateMatch(fileInfo.allEntries[0].cdnUrl);
   };
+
+  const updateMatch = async (src) => {
+    try {
+      const response = await matchAPI.updateMatch(matchData._id, {...matchData, videoUrl: [{url: src}]});
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating match:", error);
+    }
+  } 
 
   const handleMoveVideo = (fromIdx, toIdx) => {
     dispatch(moveVideo({ fromIdx, toIdx }));
@@ -220,10 +231,9 @@ const VideoPlayerArea = ({ matchData }) => {
   return (
     <div ref={containerRef} className="relative h-full overflow-hidden">
       {/* Playlist (top left) */}
-      {videos.length > 0 && (
+      {/* {videos.length > 0 && (
         <div className="absolute top-2 left-2 bg-gray-900/80 p-2 rounded text-sm z-10">
           <label className="block mb-1 text-gray-300 font-semibold">
-            {/* Video Playlist {currentVideoIndex + 1}/{videos.length} */}
           </label>
           <FileUploaderRegular
             pubkey="effd4083340611ab571c"
@@ -301,7 +311,7 @@ const VideoPlayerArea = ({ matchData }) => {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
 
       {/* Zoom (top right) */}
       {videos.length > 0 && (

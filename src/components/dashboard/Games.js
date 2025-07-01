@@ -147,8 +147,8 @@ const Games = () => {
           <span>Create New Match</span>
         </button>
       </div>
-      <div className="grid grid-cols-12 gap-[6px] px-[24px] bg-gray-100 overflow-hidden h-full">
-        <div className="col-span-12 matches-list">
+      <div className="matches grid grid-cols-12 gap-[6px] px-[24px] bg-gray-100 min-h-0 overflow-hidden">
+        <div className="col-span-12 min-h-0 overflow-hidden matches-list">
           {matchesList.length > 0 && (
             <div>
               <div className="bg-gray-100 text-tgray font-bold text-[14px] p-2 w-full grid grid-cols-12  p-[10px]">
@@ -221,57 +221,63 @@ const Games = () => {
                     <div className="flex flex-col items-center justify-center col-span-2">
                       <span className="flex items-center justify-center py-[8px] w-full border-b border-bordergray">
                         <span className="text-[12px] text-tgray">
-                          {match.playerStats?.home[0].name}{" "}
+                          {/* {match.playerStats?.home[0].name}{" "} */}
                         </span>{" "}
-                        - {match.playerStats?.home[0].points}
+                        {/* - {match.playerStats?.home[0].points} */}
                       </span>
-                      <span className="flex items-center justify-center py-[8px] w-full">
+                      {/* <span className="flex items-center justify-center py-[8px] w-full">
                         <span className="text-[12px] text-tgray">
                           {match.playerStats?.away[0].name}{" "}
                         </span>{" "}
                         - {match.playerStats?.away[0].points}
-                      </span>
+                      </span> */}
                     </div>
                     <div className="flex flex-col items-center justify-center col-span-2">
-                      <span className="flex items-center justify-center py-[8px] w-full border-b border-bordergray">
+                      {/* <span className="flex items-center justify-center py-[8px] w-full border-b border-bordergray">
                         <span className="text-[12px] text-tgray">
                           {match.playerStats?.home[1].name}{" "}
                         </span>{" "}
                         - {match.playerStats?.home[1].rebounds}
-                      </span>
-                      <span className="flex items-center justify-center py-[8px] w-full">
+                      </span> */}
+                      {/* <span className="flex items-center justify-center py-[8px] w-full">
                         <span className="text-[12px] text-tgray">
                           {match.playerStats?.away[1].name}{" "}
                         </span>{" "}
                         - {match.playerStats?.away[1].rebounds}
-                      </span>
+                      </span> */}
                     </div>
                     <div className="flex flex-col items-center justify-center col-span-2">
-                      <span className="flex items-center justify-center py-[8px] w-full border-b border-bordergray">
+                      {/* <span className="flex items-center justify-center py-[8px] w-full border-b border-bordergray">
                         <span className="text-[12px] text-tgray">
                           {match.playerStats?.home[1].name}{" "}
                         </span>{" "}
                         - {match.playerStats?.home[1].assists}
-                      </span>
-                      <span className="flex items-center justify-center py-[8px] w-full">
+                      </span> */}
+                      {/* <span className="flex items-center justify-center py-[8px] w-full">
                         <span className="text-[12px] text-tgray">
                           {match.playerStats?.away[1].name}{" "}
                         </span>{" "}
                         - {match.playerStats?.away[1].assists}
-                      </span>
+                      </span> */}
                     </div>
                     <div className="relative flex flex-col items-center justify-center col-span-2 space-y-[4px]">
                       <div className="px-[8px] hidden group-hover:block">
                         <div className="flex items-center justify-start space-x-[6px] w-full">
-                          <img src={Play} alt="play" className="w-[14px]" />
+                          {/* <img src={Play} alt="play" className="w-[14px]" />
                           <div className="text-tgray text-[14px] hover:text-dark">
                             Full Game Video
-                          </div>
+                          </div> */}
                         </div>
-                        <div className="flex items-center justify-start space-x-[6px] w-full">
+                        <div
+                          className="flex items-center justify-start space-x-[6px] w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/match-analytics/${match._id}`);
+                          }}
+                        >
                           <img src={Play} alt="play" className="w-[14px]" />
                           <div className="text-tgray text-[14px] hover:text-dark">
-                            All Highlight
+                            Match Analytics
                           </div>
                         </div>
                         <div

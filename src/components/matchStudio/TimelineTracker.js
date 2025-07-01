@@ -137,7 +137,8 @@ const TimelineTracker = ({ matchId }) => {
 
                 {/* Tooltip */}
                 {hoveredEventId === event.id && (
-                  <div className="absolute z-50 font-bold text-gray-700 left-1/2 -translate-x-1/2 top-full mt-2 min-w-[190px] bg-white rounded shadow-xl border p-3 text-sm animate-fade-in">
+                  <div className="absolute z-50 font-bold text-gray-700 left-1/2 -translate-x-1/2
+                   top-full mt-2 min-w-[190px] bg-white rounded shadow-xl border p-3 text-sm animate-fade-in">
                     <div className="mb-1">{event.type}</div>
                     <div>
                       <span className="font-semibold">Time: </span>

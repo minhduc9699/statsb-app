@@ -63,6 +63,7 @@ const MatchStudio = () => {
   }, [matchEvents]);
 
   const reCaculate = async () => {
+    if (!matchId) return;
     await updateStats();
     const data = await fetchMatchData(matchId);
     setMatchData(data);
@@ -112,9 +113,9 @@ const MatchStudio = () => {
 
   return (
     <>
-      <div className="bg-studiobg w-full h-full overflow-hidden">
-        <div className="page-container grid grid-cols-12 gap-[12px] p-[14px] h-screen">
-          <div className="col-span-6 h-full">
+      <div className="bg-studiobg page-container overflow-hidden">
+        <div className="h-full grid grid-cols-12 gap-[12px] p-[14px] min-h-0">
+          <div className="col-span-6 h-full flex flex-col min-h-0 overflow-hidden">
             <div className="h-2/3">
               <VideoPlayerArea matchData={matchData} />
             </div>
@@ -123,14 +124,14 @@ const MatchStudio = () => {
               <TimelineTracker matchId={matchId} />
             </div>
           </div>
-          <div className="col-span-6 h-full flex flex-col gap-[12px]">
-            <div className="h-1/2">
+          <div className="col-span-6 h-full flex flex-col gap-[12px] min-h-0 overflow-hidden">
+            <div className="h-1/3 overflow-y-auto">
               <div className="h-full flex items-center justify-between gap-[12px]">
                 <MatchInfo matchData={matchData} />
-                <EventLog />
+                <EventLog matchId={matchId} />
               </div>
             </div>
-            <div className="h-full">
+            <div className="h-2/3">
               <EventCreator />
             </div>
           </div>

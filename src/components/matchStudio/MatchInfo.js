@@ -22,7 +22,7 @@ const MatchInfo = ({ matchData }) => {
   }, [matchData?.teamStats?.home?.points, matchData?.teamStats?.away?.points]);
 
   return (
-    <div className="w-full h-full p-3 bg-white rounded flex flex-col items-center justify-start">
+    <div className="w-full h-full p-3 bg-white rounded flex flex-col items-center justify-center">
       <div className="font-bold text-center mb-2 tracking-wider text-gray-700 text-sm">
         Match Info
       </div>

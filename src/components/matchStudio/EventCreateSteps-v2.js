@@ -139,10 +139,10 @@ const EventCreateStepsV2 = () => {
     switch (step.type) {
       case "selectTeam":
         return (
-          <div className="flex gap-4 mt-3 mb-6">
+          <div className="flex gap-4 mt-3 mb-6 w-full justify-center">
             <button
               onClick={() => handleNext(homeTeam._id)}
-              className={`bg-blue-500 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-600 transition-all ${
+              className={`bg-tgray text-white px-5 py-2 rounded-lg shadow hover:bg-studiobg transition-all ${
                 formData.team === homeTeam._id ? "ring-2 ring-blue-400" : ""
               }`}
             >
@@ -155,7 +155,7 @@ const EventCreateStepsV2 = () => {
             </button>
             <button
               onClick={() => handleNext(awayTeam._id)}
-              className={`bg-green-600 text-white px-5 py-2 rounded-lg shadow hover:bg-green-700 transition-all ${
+              className={`bg-tgray text-white px-5 py-2 rounded-lg shadow hover:bg-studiobg transition-all ${
                 formData.team === awayTeam._id ? "ring-2 ring-green-400" : ""
               }`}
             >
@@ -217,7 +217,7 @@ const EventCreateStepsV2 = () => {
         );
       case "selectLocation":
         return (
-          <div className="relative w-full max-w-[600px] mx-auto mt-2">
+          <div className="relative w-full max-w-[350px] mx-auto mt-2">
             <img
               src={basketballFullCourt}
               alt="court"
@@ -323,7 +323,7 @@ const EventCreateStepsV2 = () => {
 
   // UI
   return (
-    <div className="w-full max-w-sm mx-auto mt-2 p-4 bg-white rounded-xl shadow-md">
+    <div className="w-full mt-2 px-4 bg-white flex flex-col items-center justify-center h-full">
       {toast && (
         <EventToastNoti message={toast} onClose={() => setToast(null)} />
       )}
@@ -338,7 +338,7 @@ const EventCreateStepsV2 = () => {
                 setFormData({});
                 setCourtPosition(null);
               }}
-              className="bg-orange-300 hover:bg-orange-400 text-orange-900 px-3 py-3 rounded-xl shadow font-semibold text-md"
+              className="bg-tgray hover:bg-studiobg text-orange-900 px-3 py-3 rounded-xl shadow font-semibold text-md"
             >
               {type}
             </button>
@@ -346,11 +346,13 @@ const EventCreateStepsV2 = () => {
         </div>
       ) : (
         <>
-          <h2 className="text-lg font-bold mb-3 text-center text-sky-700 tracking-wide">
-            {steps[stepIndex]?.label || "Step"}
-          </h2>
-          {renderStep()}
-          <div className="flex items-center justify-between mt-5 gap-2">
+          <div className="">
+            <h2 className="text-lg font-bold mb-3 text-center text-sky-700 tracking-wide">
+              {steps[stepIndex]?.label || "Step"}
+            </h2>
+            {renderStep()}
+          </div>
+          <div className="flex items-center justify-between mt-5 gap-2 w-full px-[60px]">
             <button
               onClick={() =>
                 stepIndex === 0 ? resetAll() : setStepIndex((prev) => prev - 1)

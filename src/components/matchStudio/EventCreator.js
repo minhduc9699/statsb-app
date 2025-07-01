@@ -13,11 +13,11 @@ const EventCreator = () => {
 
 
   return (
-    <div className="h-full w-full flex items-center justify-center bg-white rounded shadow">
-      <div className="w-full h-[100%] p-4 bg-white rounded shadow">
+    <div className="flex items-start justify-center bg-white rounded shadow h-full">
+      <div className="w-full p-4 h-full">
         {!isPlaying && (
           <>
-            <div className="text-[20px] pb-[16px] text-start">
+            <div className="text-[20px] text-start">
               Create Event at (
               <span className="text-sky-500">{formatTime(currentTime)}</span>)
             </div>

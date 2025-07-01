@@ -6,6 +6,7 @@ import MatchStudio from "../pages/MatchStudio";
 import MainLayout from "../layouts/MainLayout";
 import CreateNewPlayer from "../pages/CreateNewPlayer";
 import CreateNewTeam from "../pages/CreateNewTeam";
+import MatchAnalytics from "../pages/MatchAnalytics"
 
 const AppRouter = () => {
   return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
         <Route path="/player/:playerId" element={<CreateNewPlayer />} />
         <Route path="/team" element={<CreateNewTeam />} />
         <Route path="/team/:teamId" element={<CreateNewTeam />} />
+        <Route path="/match-analytics/:matchId" element={<MatchAnalytics />} />
       </Routes>
     </MainLayout>
   );
