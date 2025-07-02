@@ -149,7 +149,7 @@ const Games = () => {
       </div>
       <div className="matches grid grid-cols-12 gap-[6px] px-[24px] bg-gray-100 min-h-0 overflow-hidden">
         <div className="col-span-12 min-h-0 overflow-hidden matches-list">
-          {matchesList.length > 0 && (
+          {matchesList?.length > 0 && (
             <div>
               <div className="bg-gray-100 text-tgray font-bold text-[14px] p-2 w-full grid grid-cols-12  p-[10px]">
                 <div className="flex items-center justify-center col-span-1"></div>

@@ -100,12 +100,6 @@ const Players = () => {
     setIsOpen(false);
   };
 
-  const isValidObject = (obj) =>
-    obj &&
-    typeof obj === "object" &&
-    !Array.isArray(obj) &&
-    Object.keys(obj).length > 0;
-
   return (
     <>
       <div className="bg-dark text-white font-roboto text-[14px] flex items-center justify-between px-[24px] py-[10px]">
@@ -117,7 +111,7 @@ const Players = () => {
       </div>
       <div className="grid grid-cols-12 gap-[6px] px-[24px] bg-gray-100 overflow-hidden h-full">
         <div className="col-span-12 matches-list">
-          {playersList.length > 0 && (
+          {playersList?.length > 0 && (
             <div>
               <div className="bg-gray-100 text-tgray font-bold text-[14px] p-2 w-full grid grid-cols-12  p-[10px]">
                 <div className="flex items-center justify-center col-span-4"></div>

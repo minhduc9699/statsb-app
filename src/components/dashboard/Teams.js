@@ -52,12 +52,6 @@ const Teams = () => {
     setIsOpen(false);
   };
 
-  const isValidObject = (obj) =>
-    obj &&
-    typeof obj === "object" &&
-    !Array.isArray(obj) &&
-    Object.keys(obj).length > 0;
-
   return (
     <>
       <div className="bg-dark text-white font-roboto text-[14px] flex items-center justify-between px-[24px] py-[10px]">
@@ -89,7 +83,7 @@ const Teams = () => {
                 </div>
                 <div className="flex items-center justify-center col-span-1"></div>
               </div>
-              {teamsList.map((team, index) => (
+              {teamsList?.map((team, index) => (
                 <div
                   onClick={() => navigate(`/team/${team._id}`)}
                   key={index}
