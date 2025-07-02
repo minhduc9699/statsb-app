@@ -4,7 +4,6 @@ import { formatDate } from "../../utils/formatDate";
 import playerAPI from "../../api/playerAPI";
 import PlayersFilter from "./filters/PlayersFilter";
 
-import Curry from "../../assets/mock/curry.png";
 import infoIcon from "../../assets/info-icon.png";
 import Delete from "../../assets/delete.png";
 
