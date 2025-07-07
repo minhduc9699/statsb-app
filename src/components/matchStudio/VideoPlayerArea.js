@@ -65,8 +65,7 @@ const VideoPlayerArea = ({ matchData }) => {
   }, [seekingTime]);
 
   const handleAfterUpload = async (fileInfo) => {
-    console.log(fileInfo);
-
+    if (!fileInfo || !fileInfo.cdnUrl) return;
     const url = fileInfo.allEntries[0].cdnUrl;
     if (url === null) return;
     dispatch(addVideo({ src: url, name: "hiep1" }));
@@ -75,12 +74,15 @@ const VideoPlayerArea = ({ matchData }) => {
 
   const updateMatch = async (src) => {
     try {
-      const response = await matchAPI.updateMatch(matchData._id, {...matchData, videoUrl: [{url: src}]});
+      const response = await matchAPI.updateMatch(matchData._id, {
+        ...matchData,
+        videoUrl: [{ url: src }],
+      });
       console.log(response.data);
     } catch (error) {
       console.error("Error updating match:", error);
     }
-  } 
+  };
 
   const handleMoveVideo = (fromIdx, toIdx) => {
     dispatch(moveVideo({ fromIdx, toIdx }));

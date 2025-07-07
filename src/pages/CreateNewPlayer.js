@@ -10,7 +10,7 @@ import HaftCourt from "../assets/court/Basketball_half_court.svg";
 
 const CreateNewPlayer = () => {
   const navigate = useNavigate();
-    const { playerId } = useParams();
+  const { playerId } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     jerseyNumber: "",
@@ -34,7 +34,7 @@ const CreateNewPlayer = () => {
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
-    if(playerId){
+    if (playerId) {
       fetchPlayer();
     }
     fetchTeams();
@@ -45,9 +45,9 @@ const CreateNewPlayer = () => {
       const res = await playerAPI.getPlayerById(playerId);
       setFormData({
         ...res.data,
-        position: res.data.position[0]});
+        position: res.data.position[0],
+      });
       setAvatarPreview(res.data.avatar);
-      
     } catch (err) {
       console.error(err);
     }
@@ -126,8 +126,13 @@ const CreateNewPlayer = () => {
     setAvatarPreview(null);
     setError("");
   };
-  const handleAfterUpload = (file) => {
-    setAvatarPreview(file.allEntries[0].cdnUrl);
+  const handleAfterUpload = (fileInfo) => {
+    if (!fileInfo || !fileInfo.cdnUrl) return;
+    if (!fileInfo) {
+      handleReset(); // hoặc setImage(null)
+      return;
+    }
+    setAvatarPreview(fileInfo.allEntries[0].cdnUrl);
   };
 
   return (
@@ -139,7 +144,7 @@ const CreateNewPlayer = () => {
         {/* Form bên trái */}
         <div className="w-full md:w-2/3 space-y-5">
           <h1 className="text-2xl font-bold text-center mb-4">
-            { playerId ? 'Chỉnh sửa cầu thủ 🏀' : 'Tạo cầu thủ mới 🏀'}
+            {playerId ? "Chỉnh sửa cầu thủ 🏀" : "Tạo cầu thủ mới 🏀"}
           </h1>
           {error && <p className="text-red-500 text-center">{error}</p>}
 
@@ -254,7 +259,7 @@ const CreateNewPlayer = () => {
                 type="submit"
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
               >
-                {playerId ? 'Cập nhật' : 'Tạo cầu thủ'}
+                {playerId ? "Cập nhật" : "Tạo cầu thủ"}
               </button>
               <button
                 type="button"
@@ -365,7 +370,9 @@ const CreateNewPlayer = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
             <h2 className="text-xl font-bold text-center mb-4">
-              { playerId ? '✅ Update cầu thủ thành công!' : '✅ Tạo cầu thủ thành công!'}
+              {playerId
+                ? "✅ Update cầu thủ thành công!"
+                : "✅ Tạo cầu thủ thành công!"}
             </h2>
             <p className="text-gray-600 text-center mb-6">
               Bạn muốn làm gì tiếp theo?

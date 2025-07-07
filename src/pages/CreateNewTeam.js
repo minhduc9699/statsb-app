@@ -31,7 +31,7 @@ const CreateNewTeam = () => {
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
-    if(teamId){
+    if (teamId) {
       fetchTeam();
     }
     fetchPlayers();
@@ -42,16 +42,17 @@ const CreateNewTeam = () => {
       const res = await teamAPI.getTeamById(teamId);
       setFormData(res.data);
       setLogoPreview(res.data.avatar);
-      if(res.data?.roster.length > 0){
+      if (res.data?.roster.length > 0) {
         let roster = [];
         res.data.roster.map((p) => {
-          roster.push({_id: p.player._id,
+          roster.push({
+            _id: p.player._id,
             position: [p.player.position?.[0]],
             name: p.player.name,
           });
           setSelectedPlayers(roster);
           console.log(roster);
-        })
+        });
       }
     } catch (err) {
       console.error("Failed to load team", err);
@@ -72,10 +73,14 @@ const CreateNewTeam = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAfterUpload = (file) => {
-    console.log(file);
-    
-    setLogoPreview(file.allEntries[0].cdnUrl);
+  const handleAfterUpload = (fileInfo) => {
+    if (!fileInfo || !fileInfo.cdnUrl) return;
+    if (!fileInfo) {
+      handleReset();
+      return;
+    }
+
+    setLogoPreview(fileInfo.allEntries[0].cdnUrl);
   };
 
   const handleSubmit = async (e) => {
@@ -89,11 +94,11 @@ const CreateNewTeam = () => {
       name: formData.name,
       avatar: logoPreview,
       roster: selectedPlayers.map((p) => {
-        return {player: p._id};
+        return { player: p._id };
       }),
     };
-    
-    if(teamId){
+
+    if (teamId) {
       try {
         await teamAPI.updateTeam(teamId, payload);
         setShowSuccessModal(true);
@@ -101,7 +106,7 @@ const CreateNewTeam = () => {
         console.error(err);
         setError("Đã xảy ra lỗi khi tạo đội.");
       }
-    }else{
+    } else {
       try {
         await teamAPI.createTeam(payload);
         setShowSuccessModal(true);
@@ -114,8 +119,7 @@ const CreateNewTeam = () => {
 
   useEffect(() => {
     console.log(selectedPlayers);
-    
-  },[selectedPlayers])
+  }, [selectedPlayers]);
 
   const handleReset = () => {
     setFormData({ name: "" });
@@ -141,7 +145,9 @@ const CreateNewTeam = () => {
       >
         {/* Form bên trái */}
         <div className="w-full md:w-2/3 space-y-5">
-          <h1 className="text-2xl font-bold text-center mb-4">{ teamId ? 'Chỉnh sửa đội bóng' : 'Tạo đội bóng mới 🏀'}</h1>
+          <h1 className="text-2xl font-bold text-center mb-4">
+            {teamId ? "Chỉnh sửa đội bóng" : "Tạo đội bóng mới 🏀"}
+          </h1>
           {error && <p className="text-red-500 text-center">{error}</p>}
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -156,7 +162,9 @@ const CreateNewTeam = () => {
             </div>
 
             <div>
-              <label className="block font-medium mb-1">Logo đội (JPG, PNG)</label>
+              <label className="block font-medium mb-1">
+                Logo đội (JPG, PNG)
+              </label>
               <FileUploaderMinimal
                 pubkey="effd4083340611ab571c"
                 multiple={false}
@@ -179,17 +187,23 @@ const CreateNewTeam = () => {
               {openPlayerDropdown && (
                 <div className="absolute z-50 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-64 overflow-y-auto">
                   {players.map((player) => {
-                    const selected = selectedPlayers.find((p) => p._id === player._id);
+                    const selected = selectedPlayers.find(
+                      (p) => p._id === player._id
+                    );
                     return (
                       <div
                         key={player._id}
                         onClick={() => toggleSelectPlayer(player)}
                         className={`px-4 py-2 cursor-pointer flex justify-between items-center ${
-                          selected ? "bg-blue-100 font-medium" : "hover:bg-gray-100"
+                          selected
+                            ? "bg-blue-100 font-medium"
+                            : "hover:bg-gray-100"
                         }`}
                       >
                         <span>{player.name}</span>
-                        <span className="text-sm text-gray-500">{player.position?.[0]}</span>
+                        <span className="text-sm text-gray-500">
+                          {player.position?.[0]}
+                        </span>
                       </div>
                     );
                   })}
@@ -219,7 +233,10 @@ const CreateNewTeam = () => {
         <div className="w-1/3 bg-gray-50 rounded-xl shadow-inner hidden md:flex flex-col items-center justify-center border-l pl-6">
           <div className="text-center">
             <img
-              src={logoPreview || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
+              src={
+                logoPreview ||
+                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+              }
               alt="Logo Preview"
               className="w-40 h-40 object-contain bg-white border rounded-full mx-auto mb-4"
             />
@@ -228,11 +245,15 @@ const CreateNewTeam = () => {
             </h2>
           </div>
           <div className="mt-4 w-full">
-            <h3 className="text-center font-semibold mb-2">Cầu thủ theo vị trí</h3>
+            <h3 className="text-center font-semibold mb-2">
+              Cầu thủ theo vị trí
+            </h3>
             <div className="relative w-full h-full rounded-lg overflow-hidden flex items-center justify-center">
               <img src={HaftCourt} alt="Sơ đồ sân" className="w-[80%]" />
               {positions.map((pos) => {
-                const player = selectedPlayers.find((p) => p.position?.[0] === pos);
+                const player = selectedPlayers.find(
+                  (p) => p.position?.[0] === pos
+                );
                 const [top, left] = {
                   PG: ["60%", "50%"],
                   SG: ["50%", "25%"],
@@ -245,7 +266,9 @@ const CreateNewTeam = () => {
                   <div
                     key={pos}
                     className={`absolute px-3 py-1 rounded-full text-sm shadow transition ${
-                      player ? "bg-blue-600 text-white scale-110" : "bg-white text-gray-500"
+                      player
+                        ? "bg-blue-600 text-white scale-110"
+                        : "bg-white text-gray-500"
                     }`}
                     style={{
                       top,
@@ -267,7 +290,9 @@ const CreateNewTeam = () => {
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-            <h2 className="text-xl font-bold text-center mb-4">{teamId ? '✅ Update thành công!' : '✅ Tạo đội thành công!'}</h2>
+            <h2 className="text-xl font-bold text-center mb-4">
+              {teamId ? "✅ Update thành công!" : "✅ Tạo đội thành công!"}
+            </h2>
             <p className="text-gray-600 text-center mb-6">
               Bạn muốn làm gì tiếp theo?
             </p>
