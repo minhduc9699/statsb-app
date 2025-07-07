@@ -183,12 +183,35 @@ const VideoPlayerArea = ({ matchData }) => {
     if (!isDragging || !containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
-    const deltaX = ((e.clientX - dragStart.x) / rect.width) * 100 * -1; // Invert for natural movement
-    const deltaY = ((e.clientY - dragStart.y) / rect.height) * 100 * -1;
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
 
-    // Calculate new position with boundaries
-    const newX = Math.max(0, Math.min(100, zoomPosition.x + deltaX));
-    const newY = Math.max(0, Math.min(100, zoomPosition.y + deltaY));
+    let percentX = 0;
+    let percentY = 0;
+
+    switch (rotateDeg % 360) {
+      case 0:
+        percentX = (dx / rect.width) * 100 * -1;
+        percentY = (dy / rect.height) * 100 * -1;
+        break;
+      case 90:
+        percentX = (dy / rect.height) * 100;
+        percentY = (-dx / rect.width) * 100;
+        break;
+      case 180:
+        percentX = (-dx / rect.width) * 100;
+        percentY = (-dy / rect.height) * 100;
+        break;
+      case 270:
+        percentX = (-dy / rect.height) * 100;
+        percentY = (dx / rect.width) * 100;
+        break;
+      default:
+        break;
+    }
+
+    const newX = Math.max(0, Math.min(100, zoomPosition.x + percentX));
+    const newY = Math.max(0, Math.min(100, zoomPosition.y + percentY));
 
     setZoomPosition({ x: newX, y: newY });
     setDragStart({ x: e.clientX, y: e.clientY });
