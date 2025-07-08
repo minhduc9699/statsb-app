@@ -182,13 +182,21 @@ const EventCreateStepsV2 = () => {
                     : ""
                 }`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-6">
                   <img
-                    src={player.player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
+                    src={
+                      player.player.avatar ||
+                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                    }
                     alt=""
                     className="w-6 h-6 rounded-full"
                   />
-                  <span>{player.player.name}</span>
+                  <span className="flex items-center gap-6 w-full">
+                    <div className="font-semibold text-gray-700 text-[17px]">
+                      {player.player?.jerseyNumber}
+                    </div>
+                    <div>{player.player.name}</div>
+                  </span>
                 </div>
               </button>
             ))}
