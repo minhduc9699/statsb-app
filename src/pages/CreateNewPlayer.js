@@ -127,12 +127,13 @@ const CreateNewPlayer = () => {
     setError("");
   };
   const handleAfterUpload = (fileInfo) => {
-    if (!fileInfo || !fileInfo.cdnUrl) return;
     if (!fileInfo) {
-      handleReset(); // hoặc setImage(null)
+      setAvatarPreview(null);
+      setError("");
       return;
+    } else {
+      setAvatarPreview(fileInfo.allEntries[0].cdnUrl);
     }
-    setAvatarPreview(fileInfo.allEntries[0].cdnUrl);
   };
 
   return (
@@ -211,13 +212,14 @@ const CreateNewPlayer = () => {
                 Ảnh đại diện (JPG, PNG)
               </label>
               <FileUploaderMinimal
-                pubkey="effd4083340611ab571c"
+                pubkey="dbddae4f64d1ab0ca344"
                 multiple={false}
                 onChange={(fileInfo) => {
                   handleAfterUpload(fileInfo);
                 }}
                 locale="en"
                 tabs="file url camera"
+                showEditButton={false}
               />
             </div>
             <div className="w-full relative" ref={dropdownRef}>

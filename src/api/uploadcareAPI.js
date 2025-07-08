@@ -1,5 +1,5 @@
 // api/uploadcareAPI.js
-const UPLOADCARE_PUBLIC_KEY = "effd4083340611ab571c";
+const UPLOADCARE_PUBLIC_KEY = "dbddae4f64d1ab0ca344";
 const UPLOADCARE_SECRET_KEY = "YOUR_SECRET_KEY"; // để bảo mật, nên gọi từ backend nếu dùng secret
 
 const API_BASE = "https://api.uploadcare.com";

@@ -105,7 +105,7 @@ const Teams = () => {
                       Male
                     </div>
                     <div className="flex items-center justify-center col-span-2">
-                      30
+                      02
                     </div>
                     <div className="flex items-center justify-between col-span-4">
                       <div className="flex flex-col space-y-[10px] items-center justify-start w-1/2">

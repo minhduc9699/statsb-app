@@ -65,11 +65,14 @@ const VideoPlayerArea = ({ matchData }) => {
   }, [seekingTime]);
 
   const handleAfterUpload = async (fileInfo) => {
-    if (!fileInfo || !fileInfo.cdnUrl) return;
-    const url = fileInfo.allEntries[0].cdnUrl;
-    if (url === null) return;
-    dispatch(addVideo({ src: url, name: "hiep1" }));
-    await updateMatch(fileInfo.allEntries[0].cdnUrl);
+    if (!fileInfo || fileInfo.allEntries.length === 0) {
+      return;
+    } else {
+      const url = fileInfo.allEntries[0].cdnUrl;
+      if (url === null) return;
+      dispatch(addVideo({ src: url, name: "hiep1" }));
+      await updateMatch(fileInfo.allEntries[0].cdnUrl);
+    }
   };
 
   const updateMatch = async (src) => {
@@ -191,19 +194,19 @@ const VideoPlayerArea = ({ matchData }) => {
 
     switch (rotateDeg % 360) {
       case 0:
-        percentX = (dx / rect.width) * 100 * -1;
-        percentY = (dy / rect.height) * 100 * -1;
-        break;
-      case 90:
-        percentX = (dy / rect.height) * 100;
-        percentY = (-dx / rect.width) * 100;
-        break;
-      case 180:
         percentX = (-dx / rect.width) * 100;
         percentY = (-dy / rect.height) * 100;
         break;
-      case 270:
+      case 90:
         percentX = (-dy / rect.height) * 100;
+        percentY = (-dx / rect.width) * 100;
+        break;
+      case 180:
+        percentX = (dx / rect.width) * 100;
+        percentY = (dy / rect.height) * 100;
+        break;
+      case 270:k
+        percentX = (dy / rect.height) * 100;
         percentY = (dx / rect.width) * 100;
         break;
       default:
@@ -261,7 +264,7 @@ const VideoPlayerArea = ({ matchData }) => {
           <label className="block mb-1 text-gray-300 font-semibold">
           </label>
           <FileUploaderRegular
-            pubkey="effd4083340611ab571c"
+            pubkey="dbddae4f64d1ab0ca344"
             multiple={false}
             accept="video/*"
             onChange={(fileInfo) => {
@@ -364,7 +367,7 @@ const VideoPlayerArea = ({ matchData }) => {
       {/* Upload if empty */}
       {videos.length === 0 && (
         <FileUploaderRegular
-          pubkey="effd4083340611ab571c"
+          pubkey="dbddae4f64d1ab0ca344"
           multiple={false}
           onChange={handleAfterUpload}
           locale="en"

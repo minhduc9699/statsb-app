@@ -74,13 +74,13 @@ const CreateNewTeam = () => {
   };
 
   const handleAfterUpload = (fileInfo) => {
-    if (!fileInfo || !fileInfo.cdnUrl) return;
     if (!fileInfo) {
-      handleReset();
+      setLogoPreview(null);
+      setError("");
       return;
+    } else {
+      setLogoPreview(fileInfo.allEntries[0].cdnUrl);
     }
-
-    setLogoPreview(fileInfo.allEntries[0].cdnUrl);
   };
 
   const handleSubmit = async (e) => {
@@ -166,11 +166,12 @@ const CreateNewTeam = () => {
                 Logo đội (JPG, PNG)
               </label>
               <FileUploaderMinimal
-                pubkey="effd4083340611ab571c"
+                pubkey="dbddae4f64d1ab0ca344"
                 multiple={false}
                 onChange={handleAfterUpload}
                 locale="en"
                 tabs="file url camera"
+                showEditButton={false}
               />
             </div>
 

@@ -191,22 +191,24 @@ const Games = () => {
                       </span> */}
                       <span className="text-[12px] flex items-center justify-start space-x-[10px] py-[8px] w-full border-b border-bordergray">
                         <img
-                          src={match.homeTeam.avatar}
+                          src={match.homeTeam?.avatar ||
+                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
                           alt="home-logo"
                           className="w-16 h-16 object-cover rounded-full border"
                         />
                         <div className="text-[14px] font-bold">
-                          {match.homeTeam.name}
+                          {match.homeTeam?.name}
                         </div>
                       </span>
                       <span className="text-[12px] flex items-center justify-start space-x-[10px] py-[8px] w-full">
                         <img
-                          src={match.awayTeam.avatar}
+                          src={match.awayTeam?.avatar ||
+                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
                           alt="away-logo"
                           className="w-16 h-16 object-cover rounded-full border"
                         />
                         <div className="text-[14px] font-bold">
-                          {match.awayTeam.name}
+                          {match.awayTeam?.name}
                         </div>
                       </span>
                     </div>

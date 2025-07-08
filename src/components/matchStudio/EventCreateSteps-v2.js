@@ -43,9 +43,7 @@ const EventCreateStepsV2 = () => {
     }
   }, [editingEvent]);
 
-  // Reset khi chọn lại event type lúc tạo mới
   useEffect(() => {
-    console.log(eventType, editingEvent);
     if (!editingEvent) {
       setFormData({});
       setCourtPosition(null);
@@ -186,7 +184,7 @@ const EventCreateStepsV2 = () => {
               >
                 <div className="flex items-center gap-2">
                   <img
-                    src={player.player.avatar || "/avatar-default.png"}
+                    src={player.player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
                     alt=""
                     className="w-6 h-6 rounded-full"
                   />
@@ -284,8 +282,8 @@ const EventCreateStepsV2 = () => {
                 <>
                   <mask id="out-3pt-area">
                     <rect x="0" y="0" width="100%" height="100%" fill="black" />
-                    <circle cx="8%" cy="50%" r="23.5%" fill="white" />
-                    <circle cx="92%" cy="50%" r="23.5%" fill="white" />
+                    <circle cx="12.75%" cy="50%" r="24.25%" fill="white" />
+                    <circle cx="87%" cy="50%" r="24.25%" fill="white" />
                   </mask>
                   <rect
                     x="0"

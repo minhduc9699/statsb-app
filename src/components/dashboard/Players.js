@@ -103,7 +103,7 @@ const Players = () => {
   return (
     <>
       <div className="bg-dark text-white font-roboto text-[14px] flex items-center justify-between px-[24px] py-[10px]">
-        <div className="">Teams List</div>
+        <div className="">Players List</div>
         <button className="bg-green flex items-center p-[12px] rounded-[10px] space-x-[5px]">
           <img className="w-[10px] h-[10px]" src={infoIcon} alt="info-icon" />
           <span onClick={() => navigate("/player")}>Create New Player</span>
