@@ -205,7 +205,7 @@ const VideoPlayerArea = ({ matchData }) => {
         percentX = (dx / rect.width) * 100;
         percentY = (dy / rect.height) * 100;
         break;
-      case 270:k
+      case 270:
         percentX = (dy / rect.height) * 100;
         percentY = (dx / rect.width) * 100;
         break;
