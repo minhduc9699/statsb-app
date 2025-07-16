@@ -2,19 +2,19 @@ import React, { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMatchId, setMatchInfo, setGameType } from "../store/matchSlide";
-import { updateStats } from "../utils/updateStats";
-import teamAPI from "../api/teamAPI";
-import matchAPI from "../api/matchAPI";
-import VideoPlayerArea from "../components/matchStudio/VideoPlayerArea";
-import TimelineTracker from "../components/matchStudio/TimelineTracker";
-import EventCreator from "../components/matchStudio/EventCreator";
-import EventLog from "../components/matchStudio/EventLog";
-import MatchInfo from "../components/matchStudio/MatchInfo";
-import MatchSetupDialog from "../components/matchStudio/MatchSetupDialog";
-// import LoadingOverlay from "../components/common/LoadingOverlay";
+import { setMatchId, setMatchInfo, setGameType } from "@/store/matchSlide";
+import { updateStats } from "@/utils/updateStats";
+import teamAPI from "@/api/teamAPI";
+import matchAPI from "@/api/matchAPI";
+import VideoPlayerArea from "@/components/matchStudio/VideoPlayerArea";
+import TimelineTracker from "@/components/matchStudio/TimelineTracker";
+import EventCreator from "@/components/matchStudio/EventCreator";
+import EventLog from "@/components/matchStudio/EventLog";
+import MatchInfo from "@/components/matchStudio/MatchInfo";
+import MatchSetupDialog from "@/components/matchStudio/MatchSetupDialog";
+// import LoadingOverlay from "@/components/common/LoadingOverlay";
 
-import infoIcon from "../assets/info-icon.png";
+import infoIcon from "@/assets/info-icon.png";
 
 const MatchStudio = () => {
   const dispatch = useDispatch();

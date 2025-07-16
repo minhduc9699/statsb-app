@@ -6,7 +6,11 @@ import MatchStudio from "../pages/MatchStudio";
 import MainLayout from "../layouts/MainLayout";
 import CreateNewPlayer from "../pages/CreateNewPlayer";
 import CreateNewTeam from "../pages/CreateNewTeam";
-import MatchAnalytics from "../pages/MatchAnalytics"
+import MatchAnalytics from "../pages/MatchAnalytics";
+
+// v2
+
+// import MatchStudio2 from "../pages/v2/MatchStudio";
 
 const AppRouter = () => {
   return (
@@ -21,6 +25,10 @@ const AppRouter = () => {
         <Route path="/team" element={<CreateNewTeam />} />
         <Route path="/team/:teamId" element={<CreateNewTeam />} />
         <Route path="/match-analytics/:matchId" element={<MatchAnalytics />} />
+
+        {/* v2 */}
+        {/* <Route path="/match-studio-v2" element={<MatchStudio2 />} /> */}
+        {/* <Route path="/match-studio-v2/:matchId" element={<MatchStudio2 />} /> */}
       </Routes>
     </MainLayout>
   );
