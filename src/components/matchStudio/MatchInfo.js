@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const MatchInfo = ({ matchData }) => {
+const MatchInfo = () => {
+  const matchData = useSelector((state) => state.match.matchDataStore);
   const homeTeam = useSelector((state) => state.match.homeTeam);
   const awayTeam = useSelector((state) => state.match.awayTeam);
   const season = useSelector((state) => state.match.season);
@@ -13,13 +14,19 @@ const MatchInfo = ({ matchData }) => {
   });
 
   useEffect(() => {
+    console.log(matchData);
+  }, []);
+
+  useEffect(() => {
+    console.log(matchData?.teamStats);
+    
     if (matchData?.teamStats) {
       setScore({
         home: matchData.teamStats.home.points,
         away: matchData.teamStats.away.points,
       });
     }
-  }, [matchData?.teamStats?.home?.points, matchData?.teamStats?.away?.points]);
+  }, [matchData]);
 
   return (
     <div className="w-full h-full p-3 bg-white rounded flex flex-col items-center justify-center">

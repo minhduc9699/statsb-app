@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  matchDataStore: null,
   matchId: null,
   gameType: "5v5",
   homeTeam: null,
@@ -13,6 +14,9 @@ const matchSlice = createSlice({
   name: "match",
   initialState,
   reducers: {
+    setMatchDataStore: (state, action) => {
+      state.matchDataStore = action.payload;
+    },
     setMatchInfo: (state, action) => {
       const { gameType, homeTeam, awayTeam } = action.payload;
       state.gameType = gameType;
@@ -39,6 +43,7 @@ const matchSlice = createSlice({
 });
 
 export const {
+  setMatchDataStore,
   setMatchInfo,
   setMatchId,
   setGameType,
