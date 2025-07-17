@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMatchId, setMatchInfo, setGameType } from "@/store/matchSlide";
+import { setMatchId, setMatchTeams, setGameType } from "@/store/matchSlide";
 import { updateStats } from "@/utils/updateStats";
 import teamAPI from "@/api/teamAPI";
 import matchAPI from "@/api/matchAPI";
@@ -41,7 +41,7 @@ const MatchStudio = () => {
 
         dispatch(setMatchId(matchId));
         dispatch(setGameType(matchData.gameType));
-        dispatch(setMatchInfo({ homeTeam, awayTeam }));
+        dispatch(setMatchTeams({ homeTeam, awayTeam }));
 
         setMatchData(matchData);
         setHomeTeam(homeTeam);

@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, use } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMatchDataStore, setMatchId, setMatchInfo, setGameType } from "@/store/matchSlide";
+import { setMatchDataStore, setMatchId, setMatchTeams, resetMatchState } from "@/store/matchSlide";
 import { updateStats } from "@/utils/updateStats";
 import teamAPI from "@/api/teamAPI";
 import matchAPI from "@/api/matchAPI";
@@ -18,35 +18,19 @@ const MatchStudio = () => {
   const dispatch = useDispatch();
 
   const { matchId } = useParams();
-  const [matchData, setMatchData] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(!matchId);
-  const [homeTeam, setHomeTeam] = useState(null);
-  const [awayTeam, setAwayTeam] = useState(null);
-  // const [teams, setTeams] = useState([]);
-  const [homePlayers, setHomePlayers] = useState([]);
-  const [awayPlayers, setAwayPlayers] = useState([]);
   const matchEvents = useSelector((state) => state.match.matchEvents);
-
-  const videoRef = useRef(null);
 
   useEffect(() => {
     if (!matchId) return;
-
+    dispatch(setMatchId(matchId));
     const initMatchData = async () => {
       try {
         const matchData = await fetchMatchData(matchId);
-        const { homeTeam, awayTeam } = await fetchTeamsData(matchData);
-
         dispatch(setMatchDataStore(matchData));
-        dispatch(setMatchId(matchId));
-        dispatch(setGameType(matchData.gameType));
-        dispatch(setMatchInfo({ homeTeam, awayTeam }));
 
-        setMatchData(matchData);
-        setHomeTeam(homeTeam);
-        setAwayTeam(awayTeam);
-        setHomePlayers(homeTeam.rosters || []);
-        setAwayPlayers(awayTeam.rosters || []);
+        const { homeTeam, awayTeam } = await fetchTeamsData(matchData);
+        dispatch(setMatchTeams({ homeTeam, awayTeam }));
       } catch (err) {
         console.error("Lỗi khởi tạo dữ liệu trận đấu:", err);
       }
@@ -57,15 +41,14 @@ const MatchStudio = () => {
 
   useEffect(() => {
     if (matchEvents) {
-      reCaculate();
+      reCalculate();
     }
   }, [matchEvents]);
 
-  const reCaculate = async () => {
+  const reCalculate = async () => {
     if (!matchId) return;
     await updateStats();
     const data = await fetchMatchData(matchId);
-    setMatchData(data);
     dispatch(setMatchDataStore(data));
   };
 
@@ -83,24 +66,19 @@ const MatchStudio = () => {
   const fetchTeamsData = async (matchData) => {
     const homeId = matchData?.homeTeam?._id;
     const awayId = matchData?.awayTeam?._id;
-
     if (!homeId || !awayId) {
       throw new Error("Thiếu thông tin team trong matchData");
     }
-
     try {
       const [homeRes, awayRes] = await Promise.all([
         teamAPI.getTeamById(homeId),
         teamAPI.getTeamById(awayId),
       ]);
-
       const homeData = homeRes?.data;
       const awayData = awayRes?.data;
-
       if (!homeData || !awayData) {
         throw new Error("Không lấy được dữ liệu team");
       }
-
       return { homeTeam: homeData, awayTeam: awayData };
     } catch (error) {
       console.error("Lỗi khi fetch team:", error);
@@ -108,13 +86,19 @@ const MatchStudio = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetMatchState());
+    };
+  }, []);
+
   return (
     <>
       <div className="bg-studiobg page-container overflow-hidden">
         <div className="h-full grid grid-cols-12 gap-[12px] p-[14px] min-h-0">
           <div className="col-span-6 h-full flex flex-col min-h-0 overflow-hidden">
             <div className="h-2/3">
-              <VideoPlayerArea matchData={matchData} />
+              <VideoPlayerArea />
             </div>
 
             <div className="h-1/3">

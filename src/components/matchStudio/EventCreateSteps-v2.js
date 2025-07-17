@@ -10,7 +10,6 @@ const eventTypes = Object.keys(eventStepConfigv2);
 
 const EventCreateStepsV2 = () => {
   const dispatch = useDispatch();
-  const gameType = useSelector((state) => state.match.gameType);
   const homeTeam = useSelector((state) => state.match.homeTeam);
   const awayTeam = useSelector((state) => state.match.awayTeam);
   const matchId = useSelector((state) => state.match.matchId);

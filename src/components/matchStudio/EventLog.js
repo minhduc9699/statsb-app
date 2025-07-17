@@ -16,9 +16,10 @@ const eventTypeMeta = {
   Foul: { label: "FOUL", color: "bg-orange-400", icon: "🚫" },
 };
 
-const EventLog = ({ matchId }) => {
+const EventLog = () => {
   const dispatch = useDispatch();
   const matchEvents = useSelector((state) => state.match.matchEvents);
+  const matchId = useSelector((state) => state.match.matchId);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const EventLog = ({ matchId }) => {
   }, [matchEvents]);
 
   const getMatchEvents = async () => {
-    if (matchId === null || matchId === undefined) return;
+    if (!matchId) return;
     try {
       const res = await eventAPI.getMatchEvents(matchId);
       setEvents(res);
@@ -36,8 +37,8 @@ const EventLog = ({ matchId }) => {
   };
 
   return (
-    <div className="w-full h-full bg-white rounded p-3 overflow-y-auto shadow-lg text-xs">
-      <div className="font-bold text-center mb-2 tracking-wider text-gray-700 text-sm">
+    <div className="w-full h-full bg-white rounded p-3 pt-0 overflow-y-auto shadow-lg text-xs relative">
+      <div className="font-bold text-[20px] text-center mb-2 tracking-wider text-gray-700 sticky top-0 right-0 left-0 w-full bg-white py-5">
         Event Log
       </div>
       {(!events || events.length === 0) && (
@@ -66,7 +67,7 @@ const EventLog = ({ matchId }) => {
                     className={`w-7 h-7 flex items-center justify-center rounded-full ${meta.color} text-white font-bold shadow`}
                     title={event.type}
                   >
-                    {meta.icon}
+                    <img src={event.team.avatar} alt="avatar" className="w-6 h-6 rounded-full"/>
                   </span>
                   <div className="flex flex-col flex-1">
                     <span className="font-semibold text-gray-700 text-[13px]">

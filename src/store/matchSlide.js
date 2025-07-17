@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   matchDataStore: null,
   matchId: null,
-  gameType: "5v5",
   homeTeam: null,
   awayTeam: null,
   matchEvents: [],
@@ -17,9 +16,8 @@ const matchSlice = createSlice({
     setMatchDataStore: (state, action) => {
       state.matchDataStore = action.payload;
     },
-    setMatchInfo: (state, action) => {
-      const { gameType, homeTeam, awayTeam } = action.payload;
-      state.gameType = gameType;
+    setMatchTeams: (state, action) => {
+      const { homeTeam, awayTeam } = action.payload;
       state.homeTeam = homeTeam;
       state.awayTeam = awayTeam;
     },
@@ -39,18 +37,27 @@ const matchSlice = createSlice({
     clearEditingEvent: (state) => {
       state.editingEvent = null;
     },
+    resetMatchState: (state) => {
+      state.matchDataStore = null;
+      state.matchId = null;
+      state.homeTeam = null;
+      state.awayTeam = null;
+      state.matchEvents = [];
+      state.editingEvent = null;
+    },
   },
 });
 
 export const {
   setMatchDataStore,
-  setMatchInfo,
+  setMatchTeams,
   setMatchId,
   setGameType,
   clearMatchInfo,
   setMatchEvents,
   setEditingEvent,
   clearEditingEvent,
+  resetMatchState,
 } = matchSlice.actions;
 
 export default matchSlice.reducer;

@@ -13,13 +13,8 @@ const MatchInfo = () => {
     away: 0,
   });
 
-  useEffect(() => {
-    console.log(matchData);
-  }, []);
 
   useEffect(() => {
-    console.log(matchData?.teamStats);
-    
     if (matchData?.teamStats) {
       setScore({
         home: matchData.teamStats.home.points,
