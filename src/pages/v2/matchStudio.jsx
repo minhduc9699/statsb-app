@@ -94,6 +94,16 @@ const MatchStudio = () => {
     setLoading(false);
   };
 
+  const getEvents = async () => {
+    if (!matchId) return;
+    try {
+      const res = await eventAPI.getMatchEvents(matchId);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateEvent = async (eventData, eventId = null) => {
     try {
       let res;
