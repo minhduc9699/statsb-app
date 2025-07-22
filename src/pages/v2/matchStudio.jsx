@@ -7,21 +7,20 @@ import {
   setMatchId,
   setMatchTeams,
   resetMatchState,
-  setMatchEvents,
   clearEditingEvent,
 } from "@/store/matchSlide";
 import { updateStats } from "@/utils/updateStats";
 import teamAPI from "@/api/teamAPI";
 import matchAPI from "@/api/matchAPI";
 import eventAPI from "@/api/eventAPI";
-import VideoPlayerArea from "@/components/matchStudio/VideoPlayerArea";
-import TimelineTracker from "@/components/matchStudio/TimelineTracker";
+import VideoPlayerArea from "@/components/matchStudio/v2/VideoPlayerArea";
+import TimelineTracker from "@/components/matchStudio/v2/TimelineTracker";
 import EventCreator from "@/components/matchStudio/v2/EventCreator";
 import EventLog from "@/components/matchStudio/v2/EventLogv2";
 import MatchInfo from "@/components/matchStudio/v2/MatchInfo";
-import MatchSetupDialog from "@/components/matchStudio/MatchSetupDialog";
+import MatchSetupDialog from "@/components/matchStudio/v2/MatchSetupDialog";
 import EventToastNoti from "@/components/matchStudio/EventToastNoti";
-// import LoadingOverlay from "@/components/common/LoadingOverlay";
+import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const MatchStudio = () => {
   const dispatch = useDispatch();
@@ -29,10 +28,11 @@ const MatchStudio = () => {
   const { matchId } = useParams();
   const [toast, setToast] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(!matchId);
-  const matchEvents = useSelector((state) => state.match.matchEvents);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!matchId) return;
+    setLoading(true);
     dispatch(setMatchId(matchId));
     const initMatchData = async () => {
       try {
@@ -43,24 +43,13 @@ const MatchStudio = () => {
         dispatch(setMatchTeams({ homeTeam, awayTeam }));
       } catch (err) {
         console.error("Lỗi khởi tạo dữ liệu trận đấu:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     initMatchData();
-  }, [matchId]);
-
-  useEffect(() => {
-    if (matchEvents) {
-      reCalculate();
-    }
-  }, [matchEvents]);
-
-  const reCalculate = async () => {
-    if (!matchId) return;
-    await updateStats();
-    const data = await fetchMatchData(matchId);
-    dispatch(setMatchDataStore(data));
-  };
+  }, []);
 
   const fetchMatchData = async (id) => {
     try {
@@ -96,25 +85,26 @@ const MatchStudio = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetMatchState());
-    };
-  }, []);
+  const reCalculate = async () => {
+    if (!matchId) return;
+    setLoading(true);
+    await updateStats();
+    const data = await fetchMatchData(matchId);
+    dispatch(setMatchDataStore(data));
+    setLoading(false);
+  };
 
   const updateEvent = async (eventData, eventId = null) => {
-    console.log(eventData, eventId);
     try {
       let res;
       if (eventId) {
         res = await eventAPI.editEvent(matchId, eventId, eventData);
-        dispatch(setMatchEvents(res));
         setToast("✔️ Event updated successfully!");
       } else {
         res = await eventAPI.createEvent(matchId, eventData);
-        dispatch(setMatchEvents(res));
         setToast("✔️ Event created successfully!");
       }
+      reCalculate();
       dispatch(clearEditingEvent());
     } catch (err) {
       setToast("❌ Failed to save event.");
@@ -122,11 +112,19 @@ const MatchStudio = () => {
     }
   };
 
+  // clearup
+  useEffect(() => {
+    return () => {
+      dispatch(resetMatchState());
+    };
+  }, []);
+
   return (
     <>
       {toast && (
         <EventToastNoti message={toast} onClose={() => setToast(null)} />
       )}
+      <LoadingOverlay show={loading} />
       <div className="bg-studiobg page-container overflow-hidden">
         <div className="h-full grid grid-cols-12 gap-[12px] p-[14px] min-h-0">
           <div className="col-span-6 h-full flex flex-col min-h-0 overflow-hidden">
