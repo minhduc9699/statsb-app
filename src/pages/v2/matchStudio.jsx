@@ -1,12 +1,12 @@
-import React, { useState, useRef, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setMatchDataStore,
   setMatchId,
   setMatchTeams,
   resetMatchState,
+  setMatchEvents,
   clearEditingEvent,
 } from "@/store/matchSlide";
 import { updateStats } from "@/utils/updateStats";
@@ -16,7 +16,7 @@ import eventAPI from "@/api/eventAPI";
 import VideoPlayerArea from "@/components/matchStudio/v2/VideoPlayerArea";
 import TimelineTracker from "@/components/matchStudio/v2/TimelineTracker";
 import EventCreator from "@/components/matchStudio/v2/EventCreator";
-import EventLog from "@/components/matchStudio/v2/EventLogv2";
+import EventLog from "@/components/matchStudio/v2/EventLog";
 import MatchInfo from "@/components/matchStudio/v2/MatchInfo";
 import MatchSetupDialog from "@/components/matchStudio/v2/MatchSetupDialog";
 import EventToastNoti from "@/components/matchStudio/EventToastNoti";
@@ -24,6 +24,7 @@ import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const MatchStudio = () => {
   const dispatch = useDispatch();
+  const lastEventCreatedAt = useSelector((state) => state.match.lastEventCreatedAt);
 
   const { matchId } = useParams();
   const [toast, setToast] = useState(null);
@@ -47,9 +48,13 @@ const MatchStudio = () => {
         setLoading(false);
       }
     };
-
     initMatchData();
   }, []);
+
+  useEffect(() => {
+    reCalculate();
+    getEvents();
+}, [lastEventCreatedAt]);
 
   const fetchMatchData = async (id) => {
     try {
@@ -98,7 +103,7 @@ const MatchStudio = () => {
     if (!matchId) return;
     try {
       const res = await eventAPI.getMatchEvents(matchId);
-      
+      dispatch(setMatchEvents(res));
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +144,7 @@ const MatchStudio = () => {
         <div className="h-full grid grid-cols-12 gap-[12px] p-[14px] min-h-0">
           <div className="col-span-6 h-full flex flex-col min-h-0 overflow-hidden">
             <div className="h-2/3">
-              <VideoPlayerArea />
+              <VideoPlayerArea onLoadingChange={setLoading}/>
             </div>
 
             <div className="h-1/3">

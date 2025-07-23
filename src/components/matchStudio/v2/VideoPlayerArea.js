@@ -21,8 +21,10 @@ import fiveForward from "@/assets/video-player/5-seconds-forward.png";
 import tenForward from "@/assets/video-player/10-seconds-forward.png";
 import play from "@/assets/video-player/play.png";
 import pause from "@/assets/video-player/pause.png";
+import soundOn from "@/assets/video-player/sound-on.png";
+import soundOff from "@/assets/video-player/sound-off.png";
 
-const VideoPlayerArea = () => {
+const VideoPlayerArea = ({ onLoadingChange }) => {
   const matchData = useSelector((state) => state.match.matchDataStore);
   const videos = useSelector((state) => state.video.videos);
   const currentVideoIndex = useSelector(
@@ -31,6 +33,7 @@ const VideoPlayerArea = () => {
   const currentTime = useSelector((state) => state.video.currentTime);
   const duration = useSelector((state) => state.video.duration);
   const isPlaying = useSelector((state) => state.video.isPlaying);
+  const [isMuted, setIsMuted] = useState(true);
   const seekingTime = useSelector((state) => state.video.seekingTime);
 
   const containerRef = useRef(null);
@@ -125,6 +128,13 @@ const VideoPlayerArea = () => {
     }
   };
 
+  const toggleMute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setIsMuted(videoRef.current.muted);
+  };
+
   useEffect(() => {
     if (videoRef.current) {
       dispatch(setIsPlaying(false));
@@ -151,7 +161,6 @@ const VideoPlayerArea = () => {
   };
 
   const handleLoadedMetadata = () => {
-    const video = videoRef.current;
     dispatch(setDuration(videoRef.current.duration));
   };
 
@@ -383,6 +392,11 @@ const VideoPlayerArea = () => {
           <video
             ref={videoRef}
             src={videoSrc}
+            muted={isMuted}
+            onLoadStart={() => onLoadingChange?.(true)}
+            onCanPlay={() => onLoadingChange?.(false)}
+            onSeeking={() => onLoadingChange?.(true)}
+            onSeeked={() => onLoadingChange?.(false)}
             onTimeUpdate={handleUpdateTime}
             onLoadedMetadata={handleLoadedMetadata}
             className="absolute object-contain w-full h-full"
@@ -408,6 +422,12 @@ const VideoPlayerArea = () => {
           {showControls && (
             <div>
               <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-[28px] px-[56px] py-[16px] bg-[#2D2D2DE5] transition-opacity rounded-[28px]">
+                <div
+                    onClick={toggleMute}
+                    className="w-[28px] h-[28px] cursor-pointer hover:scale-110"
+                  >
+                    <img src={isMuted ? soundOn : soundOff} alt="play" />
+                </div>
                 <div
                   onClick={() => skip(-10)}
                   className="w-[28px] h-[28px] cursor-pointer hover:scale-110"

@@ -1,22 +1,15 @@
+// TimelineTracker.js
 import React, { useState, useRef, useEffect } from "react";
 import { formatTime } from "@/utils/formatTime";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentTime, setSeekingTime } from "@/store/videoSlide";
-import { setMatchEvents, setEditingEvent } from "@/store/matchSlide";
+import { setSeekingTime } from "@/store/videoSlide";
+import { setLastEventCreatedAt, setEditingEvent } from "@/store/matchSlide";
 import eventAPI from "@/api/eventAPI";
 import EventToastNoti from "@/components/matchStudio/EventToastNoti";
 
 const eventTypes = [
-  {
-    type: "2-Point Score",
-    color: "bg-yellow-400",
-    icon: "🏀",
-  },
-  {
-    type: "3-Point Score",
-    color: "bg-yellow-400",
-    icon: "🏀",
-  },
+  { type: "2-Point Score", color: "bg-yellow-400", icon: "🏀" },
+  { type: "3-Point Score", color: "bg-yellow-400", icon: "🏀" },
   { type: "Free Throw", color: "bg-indigo-400", icon: "🎯" },
   { type: "Turnover", color: "bg-red-400", icon: "💥" },
   { type: "Steal", color: "bg-pink-400", icon: "🕵️" },
@@ -28,6 +21,8 @@ const eventTypes = [
 const TimelineTracker = ({ matchId }) => {
   const dispatch = useDispatch();
   const leaveTimeout = useRef();
+  const tooltipRef = useRef(null);
+  const eventRef = useRef(null);
 
   const currentTime = useSelector((state) => state.video.currentTime);
   const duration = useSelector((state) => state.video.duration);
@@ -38,28 +33,38 @@ const TimelineTracker = ({ matchId }) => {
   const [toast, setToast] = useState(null);
   const [deletingEvent, setDeletingEvent] = useState(null);
   const [selectedTeamId, setSelectedTeamId] = useState("all");
+  const [tooltipPos, setTooltipPos] = useState({ x: "center", y: "bottom" });
 
   useEffect(() => {
-    getMatchEvents();
+    if (!matchEvents) return;
+    setEvents(matchEvents);
   }, [matchEvents]);
 
   const handleMouseEnter = (id) => {
     clearTimeout(leaveTimeout.current);
     setHoveredEventId(id);
   };
+
   const handleMouseLeave = () => {
     leaveTimeout.current = setTimeout(() => setHoveredEventId(null), 200);
   };
 
-  const getMatchEvents = async () => {
-    if (matchId === null || matchId === undefined) return;
-    try {
-      const res = await eventAPI.getMatchEvents(matchId);
-      setEvents(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    if (!hoveredEventId || !tooltipRef.current || !eventRef.current) return;
+
+    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+    const eventRect = eventRef.current.getBoundingClientRect();
+    const padding = 8;
+
+    let x = "center";
+    if (tooltipRect.left < padding) x = "left";
+    else if (tooltipRect.right > window.innerWidth - padding) x = "right";
+
+    let y = "bottom";
+    if (tooltipRect.bottom > window.innerHeight - padding) y = "top";
+
+    setTooltipPos({ x, y });
+  }, [hoveredEventId]);
 
   const getRowIndex = (eventType) => {
     return eventTypes.findIndex((et) =>
@@ -74,9 +79,8 @@ const TimelineTracker = ({ matchId }) => {
   const handleConfirmDelete = async (event) => {
     try {
       await eventAPI.deleteEvent(matchId, event.id);
+      dispatch(setLastEventCreatedAt(new Date().toISOString()));
       setToast("✔️ Event deleted successfully!");
-      getMatchEvents();
-      dispatch(setMatchEvents(event));
     } catch (err) {
       console.log(err);
       setToast("❌ Failed to delete event.");
@@ -88,26 +92,17 @@ const TimelineTracker = ({ matchId }) => {
       ? events
       : events.filter((e) => e.team?.id === selectedTeamId);
 
-  const teams = Array.from(
-    new Set(events.map((e) => e.team?.id))
-  ).map((id) => {
+  const teams = Array.from(new Set(events.map((e) => e.team?.id))).map((id) => {
     const team = events.find((e) => e.team?.id === id)?.team;
-    return {
-      id: team?.id,
-      name: team?.name,
-      avatar: team?.avatar,
-    };
+    return { id: team?.id, name: team?.name, avatar: team?.avatar };
   });
 
   return (
     <div className="w-full h-full flex flex-col relative">
-
-      {/* Toast notification */}
       {toast && (
         <EventToastNoti message={toast} onClose={() => setToast(null)} />
       )}
 
-      {/* Team Filter */}
       <div className="flex gap-2 mb-3 items-center">
         <button
           className={`px-3 py-1 rounded ${
@@ -119,9 +114,9 @@ const TimelineTracker = ({ matchId }) => {
         >
           All Teams
         </button>
-        {teams.map((team) => (
+        {teams.map((team,index) => (
           <button
-            key={team.id}
+            key={index}
             className={`px-3 py-1 rounded flex items-center gap-2 ${
               selectedTeamId === team.id
                 ? "bg-blue-500 text-white"
@@ -132,8 +127,8 @@ const TimelineTracker = ({ matchId }) => {
             {team.avatar && (
               <img
                 src={team.avatar}
-                alt="team avatar"
                 className="w-5 h-5 rounded-full"
+                alt="team"
               />
             )}
             {team.name}
@@ -141,8 +136,7 @@ const TimelineTracker = ({ matchId }) => {
         ))}
       </div>
 
-      {/* Timeline Bar */}
-      <div className="relative bg-gray-200 flex-1 rounded">
+      <div className="relative bg-gray-200 flex-1 rounded overflow-visible">
         {[...Array(eventTypes.length - 1)].map((_, i) => (
           <div
             key={i}
@@ -151,24 +145,25 @@ const TimelineTracker = ({ matchId }) => {
           />
         ))}
 
-        {/* Current Time Indicator */}
         <div
           className="absolute top-0 bottom-0 w-[2px] bg-sky-500 z-10"
           style={{ left: `${(currentTime / duration) * 100}%` }}
         />
 
-        {/* Event Blocks */}
         {filteredEvents.map((event) => {
+          if (!event.timestamps) return null;
           const rowIndex = getRowIndex(event.type);
           const typeObj = eventTypes[rowIndex];
           const startPercent = (event.timestamps.start / duration) * 100;
           const endPercent = (event.timestamps.end / duration) * 100;
           const widthPercent = Math.max(endPercent - startPercent, 0.5);
           const topPercent = (rowIndex / eventTypes.length) * 100;
+          const isHovered = hoveredEventId === event.id;
 
           return (
             <div
               key={event.id}
+              ref={isHovered ? eventRef : null}
               className={`absolute h-[14.285%] ${
                 typeObj?.color || "bg-gray-400"
               } rounded-md cursor-pointer group flex items-center justify-center px-1 text-white text-xs`}
@@ -183,17 +178,22 @@ const TimelineTracker = ({ matchId }) => {
             >
               <span>{typeObj?.icon}</span>
 
-              {/* Tooltip */}
-              {hoveredEventId === event.id && (
+              {isHovered && (
                 <div
-                  className={`absolute z-50 font-bold text-gray-700 left-1/2 -translate-x-1/2
-                  mt-2 min-w-[190px] bg-white rounded shadow-xl border p-3 text-sm animate-fade-in ${
-                    event.type === "Foul" ||
-                    event.type === "Rebound" ||
-                    event.type === "Steal"
-                      ? "-top-[430%]"
-                      : "top-full"
-                  }`}
+                  ref={tooltipRef}
+                  className={`absolute z-50 font-bold text-gray-700 min-w-[190px] bg-white rounded shadow-xl border p-3 text-sm animate-fade-in
+                    ${
+                      tooltipPos.x === "center"
+                        ? "left-1/2 -translate-x-1/2"
+                        : ""
+                    }
+                    ${tooltipPos.x === "left" ? "left-0" : ""}
+                    ${tooltipPos.x === "right" ? "right-0" : ""}
+                    ${
+                      tooltipPos.y === "top"
+                        ? "bottom-full mb-2"
+                        : "top-full mt-2"
+                    }`}
                 >
                   <div className="mb-1">{event.type}</div>
                   <div>
@@ -252,7 +252,6 @@ const TimelineTracker = ({ matchId }) => {
         })}
       </div>
 
-      {/* Time ruler */}
       <div className="flex justify-between items-center text-[#ADB5BD] text-xs mt-1">
         <span>0:00</span>
         <span>{formatTime(duration / 4)}</span>
@@ -261,7 +260,6 @@ const TimelineTracker = ({ matchId }) => {
         <span>{formatTime(duration)}</span>
       </div>
 
-      {/* Delete confirm popup */}
       {deletingEvent && (
         <div className="fixed inset-0 z-[999] bg-black/30 flex items-center justify-center">
           <div className="bg-white rounded-xl shadow-xl p-6 text-center max-w-[90vw]">
