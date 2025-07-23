@@ -32,7 +32,7 @@ const LoadingOverlay = ({ show = false }) => {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 bg-gradient-to-br from-orange-50 to-orange-200 bg-opacity-90 flex flex-col items-center justify-center z-50 opacity-0 pointer-events-none"
+      className="fixed inset-0 bg-black from-orange-50 to-orange-200 bg-opacity-90 flex flex-col items-center justify-center z-[9999] opacity-0 pointer-events-none"
     >
       <img
         ref={ballRef}
@@ -40,7 +40,7 @@ const LoadingOverlay = ({ show = false }) => {
         alt="Loading basketball"
         className="w-16 h-16 mb-4 animate-pulse"
       />
-      <p ref={textRef} className="text-orange-800 font-semibold text-lg tracking-wide">
+      <p ref={textRef} className="text-white font-semibold text-lg tracking-wide">
         Đang tải dữ liệu trận đấu...
       </p>
     </div>

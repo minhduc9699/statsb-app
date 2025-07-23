@@ -6,6 +6,7 @@ const initialState = {
   homeTeam: null,
   awayTeam: null,
   matchEvents: [],
+  lastEventCreatedAt: [],
   editingEvent: null,
 };
 
@@ -28,7 +29,10 @@ const matchSlice = createSlice({
       state.matchId = action.payload;
     },
     setMatchEvents: (state, action) => {
-      state.matchEvents = [...state.matchEvents, action.payload];
+      state.matchEvents = action.payload;
+    },
+    setLastEventCreatedAt: (state, action) => {
+      state.lastEventCreatedAt = [...state.lastEventCreatedAt, action.payload];
     },
     setEditingEvent: (state, action) => {
       console.log(action.payload);
@@ -55,6 +59,7 @@ export const {
   setGameType,
   clearMatchInfo,
   setMatchEvents,
+  setLastEventCreatedAt,
   setEditingEvent,
   clearEditingEvent,
   resetMatchState,

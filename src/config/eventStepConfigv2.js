@@ -1,4 +1,3 @@
-// eventStepConfigBackendEnum.js
 export const eventStepConfigv2 = {
   "2-Point Score": {
     steps: [

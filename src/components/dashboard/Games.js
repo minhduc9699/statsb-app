@@ -140,7 +140,7 @@ const Games = () => {
       <div className="bg-dark text-white font-roboto text-[14px] flex items-center justify-between px-[24px] py-[10px]">
         <div className="">Matches List</div>
         <button
-          onClick={() => navigate("/match-studio")}
+          onClick={() => navigate("/match-studio-v2")}
           className="bg-green flex items-center p-[12px] rounded-[10px] space-x-[5px]"
         >
           <img className="w-[10px] h-[10px]" src={infoIcon} alt="info-icon" />
@@ -173,7 +173,7 @@ const Games = () => {
               {matchesList?.map((match, index) => (
                 <div
                   key={index}
-                  onClick={() => navigate(`/match-studio/${match._id}`)}
+                  onClick={() => navigate(`/match-studio-v2/${match._id}`)}
                   className="match-item p-[10px] my-[8px] bg-white shadow-lg group cursor-pointer hover:scale-[1.02] transition duration-300 ease-in-out"
                 >
                   <div className="grid grid-cols-12">
@@ -283,7 +283,7 @@ const Games = () => {
                           </div>
                         </div>
                         <div
-                          onClick={() => navigate(`/match-studio/${match._id}`)}
+                          onClick={() => navigate(`/match-studio-v2/${match._id}`)}
                           className="flex items-center justify-start space-x-[6px] w-full"
                         >
                           <img src={Edit} alt="play" className="w-[14px]" />
