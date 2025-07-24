@@ -18,23 +18,12 @@ const eventTypeMeta = {
 
 const EventLog = () => {
   const dispatch = useDispatch();
-  const { matchId } = useParams();
   const matchEvents = useSelector((state) => state.match.matchEvents);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    getMatchEvents();
+      setEvents(matchEvents);
   }, [matchEvents]);
-
-  const getMatchEvents = async () => {
-    if (!matchId) return;
-    try {
-      const res = await eventAPI.getMatchEvents(matchId);
-      setEvents(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="w-full h-full bg-white rounded p-3 pt-0 overflow-y-auto shadow-lg text-xs relative">

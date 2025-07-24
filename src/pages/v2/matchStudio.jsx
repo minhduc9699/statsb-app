@@ -49,9 +49,11 @@ const MatchStudio = () => {
       }
     };
     initMatchData();
+    getEvents();
   }, []);
 
   useEffect(() => {
+    if(lastEventCreatedAt.length === 0) return;
     reCalculate();
     getEvents();
 }, [lastEventCreatedAt]);
