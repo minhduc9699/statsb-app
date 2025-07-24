@@ -9,6 +9,7 @@ import {
   setMatchEvents,
   clearEditingEvent,
 } from "@/store/matchSlide";
+import { resetVideoState } from "@/store/videoSlide";
 import { updateStats } from "@/utils/updateStats";
 import teamAPI from "@/api/teamAPI";
 import matchAPI from "@/api/matchAPI";
@@ -24,7 +25,9 @@ import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const MatchStudio = () => {
   const dispatch = useDispatch();
-  const lastEventCreatedAt = useSelector((state) => state.match.lastEventCreatedAt);
+  const lastEventCreatedAt = useSelector(
+    (state) => state.match.lastEventCreatedAt
+  );
 
   const { matchId } = useParams();
   const [toast, setToast] = useState(null);
@@ -53,10 +56,10 @@ const MatchStudio = () => {
   }, []);
 
   useEffect(() => {
-    if(lastEventCreatedAt.length === 0) return;
+    if (lastEventCreatedAt.length === 0) return;
     reCalculate();
     getEvents();
-}, [lastEventCreatedAt]);
+  }, [lastEventCreatedAt]);
 
   const fetchMatchData = async (id) => {
     try {
@@ -133,6 +136,7 @@ const MatchStudio = () => {
   useEffect(() => {
     return () => {
       dispatch(resetMatchState());
+      dispatch(resetVideoState());
     };
   }, []);
 
@@ -146,7 +150,7 @@ const MatchStudio = () => {
         <div className="h-full grid grid-cols-12 gap-[12px] p-[14px] min-h-0">
           <div className="col-span-6 h-full flex flex-col min-h-0 overflow-hidden">
             <div className="h-2/3">
-              <VideoPlayerArea onLoadingChange={setLoading}/>
+              <VideoPlayerArea onLoadingChange={setLoading} />
             </div>
 
             <div className="h-1/3">

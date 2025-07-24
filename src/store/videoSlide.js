@@ -56,6 +56,14 @@ const videoSlide = createSlice({
     setSeekingTime: (state, action) => {
       state.seekingTime = action.payload;
     },
+    resetVideoState: (state) => {
+      state.videos = [];
+      state.currentVideoIndex = 0;
+      state.currentTime = 0;
+      state.duration = 0;
+      state.isPlaying = false;
+      state.seekingTime = 0;
+    },
   },
 });
 
@@ -68,6 +76,7 @@ export const {
   setCurrentTime,
   setDuration,
   setIsPlaying,
-  setSeekingTime
+  setSeekingTime,
+  resetVideoState,
 } = videoSlide.actions;
 export default videoSlide.reducer;
