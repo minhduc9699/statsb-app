@@ -426,7 +426,7 @@ const VideoPlayerArea = ({ onLoadingChange }) => {
                     onClick={toggleMute}
                     className="w-[28px] h-[28px] cursor-pointer hover:scale-110"
                   >
-                    <img src={isMuted ? soundOn : soundOff} alt="play" />
+                    <img src={!isMuted ? soundOn : soundOff} alt="play" />
                 </div>
                 <div
                   onClick={() => skip(-10)}
