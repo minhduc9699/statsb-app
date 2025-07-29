@@ -4,9 +4,10 @@ import "@uploadcare/react-uploader/core.css";
 
 import { useNavigate, useParams } from "react-router-dom";
 import gsap from "gsap";
-import teamAPI from "../api/teamAPI";
-import playerAPI from "../api/playerAPI";
-import HaftCourt from "../assets/court/Basketball_half_court.svg";
+import teamAPI from "@/api/teamAPI";
+import playerAPI from "@/api/playerAPI";
+import HaftCourt from "@/assets/court/Basketball_half_court.svg";
+import DropboxMediaUploader from "@/components/common/DropboxMediaUploader";
 
 const positions = ["PG", "SG", "SF", "PF", "C"];
 
@@ -165,14 +166,7 @@ const CreateNewTeam = () => {
               <label className="block font-medium mb-1">
                 Logo đội (JPG, PNG)
               </label>
-              <FileUploaderMinimal
-                pubkey="dbddae4f64d1ab0ca344"
-                multiple={false}
-                onChange={handleAfterUpload}
-                locale="en"
-                tabs="file url camera"
-                showEditButton={false}
-              />
+              <DropboxMediaUploader/>
             </div>
 
             <div className="w-full relative" ref={dropdownPlayerRef}>
