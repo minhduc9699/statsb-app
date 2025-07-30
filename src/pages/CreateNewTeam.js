@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FileUploaderMinimal } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/core.css";
 
 import { useNavigate, useParams } from "react-router-dom";
@@ -52,7 +51,6 @@ const CreateNewTeam = () => {
             name: p.player.name,
           });
           setSelectedPlayers(roster);
-          console.log(roster);
         });
       }
     } catch (err) {
@@ -74,13 +72,13 @@ const CreateNewTeam = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAfterUpload = (fileInfo) => {
-    if (!fileInfo) {
+  const handleAfterUpload = (url, type, name) => {
+    if (!url) {
       setLogoPreview(null);
       setError("");
       return;
     } else {
-      setLogoPreview(fileInfo.allEntries[0].cdnUrl);
+      setLogoPreview(url);
     }
   };
 
@@ -118,9 +116,6 @@ const CreateNewTeam = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectedPlayers);
-  }, [selectedPlayers]);
 
   const handleReset = () => {
     setFormData({ name: "" });
@@ -167,10 +162,10 @@ const CreateNewTeam = () => {
                 Logo đội (JPG, PNG)
               </label>
               <DropboxMediaUploader
-              appKey="xe7iqhn4pmskqbw"
-              onSelect={({ url, type, name }) => {
-                console.log("User chọn:", url, type, name);
-              }}
+                appKey="xe7iqhn4pmskqbw"
+                onSelect={({ url, type, name }) => {
+                  handleAfterUpload(url, type, name);
+                }}
               />
             </div>
 
