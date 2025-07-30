@@ -166,7 +166,12 @@ const CreateNewTeam = () => {
               <label className="block font-medium mb-1">
                 Logo đội (JPG, PNG)
               </label>
-              <DropboxMediaUploader/>
+              <DropboxMediaUploader
+              appKey="xe7iqhn4pmskqbw"
+              onSelect={({ url, type, name }) => {
+                console.log("User chọn:", url, type, name);
+              }}
+              />
             </div>
 
             <div className="w-full relative" ref={dropdownPlayerRef}>
